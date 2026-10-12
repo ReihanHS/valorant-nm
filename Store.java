@@ -38,28 +38,13 @@ public class Store extends JPanel {
 
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         left.setOpaque(false);
-        JButton backBtn = new JButton("<  BACK");
-        backBtn.setEnabled(false);
-        backBtn.setToolTipText("Leaving the store is outside this lab scope.");
-        styleNavButton(backBtn);
-        JLabel crumb = new JLabel("|   STORE // NIGHT.MARKET");
+        JLabel crumb = new JLabel("STORE // NIGHT.MARKET");
         crumb.setFont(new Font("SansSerif", Font.BOLD, 12));
         crumb.setForeground(new Color(170, 185, 200));
-        left.add(backBtn);
         left.add(crumb);
-
-        JPanel mid = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 8));
-        mid.setOpaque(false);
-        mid.add(makeTab("PLAY", true));
-        mid.add(makeTab("CAREER", false));
-        mid.add(makeTab("COLLECTION", false));
-        mid.add(makeTab("STORE", false, new Color(0, 240, 215)));
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 8));
         right.setOpaque(false);
-        JLabel rad = new JLabel("  85  ");
-        rad.setFont(new Font("SansSerif", Font.BOLD, 12));
-        rad.setForeground(Color.WHITE);
 
         JPanel vpBox = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 2));
         vpBox.setBackground(new Color(24, 32, 44));
@@ -86,12 +71,10 @@ public class Store extends JPanel {
             }
         });
 
-        right.add(rad);
         right.add(vpBox);
         right.add(addVp);
 
         nav.add(left, BorderLayout.WEST);
-        nav.add(mid, BorderLayout.CENTER);
         nav.add(right, BorderLayout.EAST);
         return nav;
     }
