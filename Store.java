@@ -3,7 +3,11 @@
  */
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class Store extends JPanel {
 
@@ -70,9 +74,17 @@ public class Store extends JPanel {
         vpBox.add(navBalanceLabel);
 
         JButton addVp = new JButton("+");
-        addVp.setEnabled(false);
-        addVp.setToolTipText("Add VP is outside this lab scope.");
         styleNavButton(addVp);
+        addVp.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        addVp.setToolTipText("Add 1,000 VP");
+        addVp.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ValorantNightMarket.balance = ValorantNightMarket.balance + 1000;
+                Store.updateBalanceLabels();
+                Store.showBanner("Added 1,000 VP. Balance: " + ValorantNightMarket.balance + " VP", true);
+            }
+        });
 
         right.add(rad);
         right.add(vpBox);
@@ -113,18 +125,28 @@ public class Store extends JPanel {
         center.setOpaque(false);
         center.setBorder(BorderFactory.createEmptyBorder(30, 8, 8, 8));
 
-        JLabel titleLabel = new JLabel("", SwingConstants.CENTER);
+        // -- NIGHT.MARKET title --
+        JLabel titleLabel = new JLabel("NIGHT.MARKET", SwingConstants.CENTER);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        File titleFile = new File(TITLE_IMAGE);
-        if (titleFile.exists()) {
-            ImageIcon raw = new ImageIcon(titleFile.getAbsolutePath());
-            Image scaled = raw.getImage().getScaledInstance(480, 62, Image.SCALE_SMOOTH);
-            titleLabel.setIcon(new ImageIcon(scaled));
-        } else {
-            titleLabel.setText("NIGHT.MARKET");
-            titleLabel.setFont(new Font("SansSerif", Font.BOLD, 36));
-            titleLabel.setForeground(new Color(225, 95, 255));
-        }
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 42));
+        titleLabel.setForeground(new Color(225, 95, 255));
+
+        // -- Dynamic countdown --
+        long daysLeft = calculateDaysLeft();
+        String countdownText = (daysLeft > 0)
+                ? "ENDS IN " + daysLeft + " DAY" + (daysLeft != 1 ? "S" : "")
+                : "NIGHT MARKET HAS ENDED";
+        JLabel countdownLabel = new JLabel(countdownText, SwingConstants.CENTER);
+        countdownLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        countdownLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        countdownLabel.setForeground(new Color(180, 140, 255));
+
+        // -- Title container --
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
+        titlePanel.setOpaque(false);
+        titlePanel.add(titleLabel);
+        titlePanel.add(countdownLabel);
 
         bannerLabel = new JLabel(" ", SwingConstants.CENTER);
         bannerLabel.setFont(new Font("SansSerif", Font.BOLD, 11));
@@ -139,7 +161,7 @@ public class Store extends JPanel {
         cardRow.setOpaque(false);
         cardRow.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        center.add(titleLabel);
+        center.add(titlePanel);
         center.add(bannerLabel);
         center.add(Box.createVerticalStrut(4));
         center.add(cardRow);
@@ -194,6 +216,17 @@ public class Store extends JPanel {
             return new ImageIcon(file.getAbsolutePath()).getImage();
         }
         return null;
+    }
+
+    /**
+     * Calculate days remaining in the night market.
+     * The market runs for 14 days starting from today.
+     */
+    private static long calculateDaysLeft() {
+        // Night market lasts 14 days. Adjust the end date as needed.
+        LocalDate endDate = LocalDate.now().plusDays(14);
+        long days = ChronoUnit.DAYS.between(LocalDate.now(), endDate);
+        return Math.max(days, 0);
     }
 
     @Override
