@@ -79,20 +79,6 @@ public class Store extends JPanel {
         return nav;
     }
 
-    private JLabel makeTab(String text, boolean active) {
-        return makeTab(text, active, Color.WHITE);
-    }
-
-    private JLabel makeTab(String text, boolean active, Color color) {
-        JLabel tab = new JLabel("  " + text + "  ");
-        tab.setFont(new Font("SansSerif", Font.BOLD, 11));
-        tab.setForeground(color);
-        if (active) {
-            tab.setOpaque(true);
-            tab.setBackground(new Color(255, 70, 85));
-        }
-        return tab;
-    }
 
     private void styleNavButton(JButton btn) {
         btn.setFont(new Font("SansSerif", Font.BOLD, 11));

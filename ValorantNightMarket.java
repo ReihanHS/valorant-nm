@@ -19,7 +19,7 @@ public class ValorantNightMarket extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ValorantNightMarket app = new ValorantNightMarket();
+            new ValorantNightMarket();
         });
     }
 
